@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: iemafzal/backend:v1
+        image: manish612/chatapp-backend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5001
