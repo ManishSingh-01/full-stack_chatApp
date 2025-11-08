@@ -1,6 +1,6 @@
 # 🚀 Full-Stack Chat App Deployment Guide: Kubernetes (Kind) & Docker Compose
 
-Welcome to the official guide for deploying a **Full-Stack Chat Application** on your local machine. Whether you're a student, a professional, or someone exploring the world of Kubernetes and Docker, this guide is designed to help you deploy the app with ease.
+Welcome to the official guide for deploying a **Full-Stack Chat Application** on your local machine. Whether you're a student a professional, or someone exploring the world of Kubernetes and Docker, this guide is designed to help you deploy the app with ease.
 
 In this tutorial, you will learn how to:
 1. Set up a local Kubernetes environment using **Kind**.
