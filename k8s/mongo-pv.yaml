@@ -1,0 +1,15 @@
+# mongo-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual  # Match this with PVC
+  hostPath:
+    path: /data/mongodb  # Directory on worker node
+    type: DirectoryOrCreate
