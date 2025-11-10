@@ -30,6 +30,19 @@ spec:
             sleep 2
           done
           echo "✅ DNS resolution successful!"
+          
+          echo ""
+          echo "Step 2: Checking MongoDB port connectivity..."
+          until nc -zv mongodb.chat-app.svc.cluster.local 27017; do
+            echo "  MongoDB port not reachable, waiting 2 seconds..."
+            sleep 2
+          done
+          echo "✅ MongoDB is reachable on port 27017!"
+          
+          echo ""
+          echo "=========================================="
+          echo "  MongoDB is ready! Starting backend..."
+          echo "=========================================="
       
       containers:
       - name: backend
@@ -51,9 +64,9 @@ spec:
               name: backend-secrets
               key: jwt-secret
         resources:
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
           requests:
             memory: "256Mi"
             cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
