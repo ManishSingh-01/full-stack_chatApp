@@ -13,6 +13,24 @@ spec:
       labels:
         app: backend
     spec:
+      # Init container waits for MongoDB to be ready
+      initContainers:
+      - name: wait-for-mongodb
+        image: busybox:1.28
+        command: ['sh', '-c']
+        args:
+        - |
+          echo "=========================================="
+          echo "  Waiting for MongoDB to be ready..."
+          echo "=========================================="
+          
+          echo "Step 1: Checking DNS resolution..."
+          until nslookup mongodb.chat-app.svc.cluster.local; do
+            echo "  DNS not ready, waiting 2 seconds..."
+            sleep 2
+          done
+          echo "✅ DNS resolution successful!"
+      
       containers:
       - name: backend
         image: manish612/chatapp-backend:latest
@@ -21,7 +39,8 @@ spec:
         - containerPort: 5001
         env:
         - name: MONGODB_URI
-          value: "mongodb://root:admin@10.98.81.27:27017/chatApp?authSource=admin"
+          value: "mongodb://root:admin@mongodb.chat-app.svc.cluster.local:27017/chatApp?authSource=admin"
+          # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Back to using DNS name!
         - name: PORT
           value: "5001"
         - name: NODE_ENV
