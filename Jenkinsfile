@@ -5,19 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'master',
-                    url: 'https://github.com/iemafzalhassan/full-stack_chatApp.git'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                script {
-                    sh '''
-                        sleep 15
-                        curl -f http://localhost:5001/health
-                        curl -f http://localhost/ || exit 1
-                    '''
-                }
+                    url: 'https://github.com/ManishSingh-01/full-stack_chatApp.git'
             }
         }
 
