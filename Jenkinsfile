@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main',
+                git branch: 'master',
                     url: 'https://github.com/ManishSingh-01/full-stack_chatApp.git'
             }
         }
@@ -69,7 +69,7 @@ pipeline {
                     echo 'Deploying MongoDB container...'
                     sh '''
                         docker run -d \
-                            --name chatapp-mongo \
+                            --name mongo \
                             --network ${NETWORK_NAME} \
                             -p 27017:27017 \
                             -e MONGO_INITDB_ROOT_USERNAME=root \
@@ -90,7 +90,7 @@ pipeline {
                     echo 'Deploying Backend container...'
                     sh '''
                         docker run -d \
-                            --name chatapp-backend \
+                            --name backend \
                             --network ${NETWORK_NAME} \
                             -p 5001:5001 \
                             --env-file .env \
@@ -109,7 +109,7 @@ pipeline {
                     echo 'Deploying Frontend container...'
                     sh '''
                         docker run -d \
-                            --name chatapp-frontend \
+                            --name frontend \
                             --network ${NETWORK_NAME} \
                             -p 8081:80 \
                             -e BACKEND_URL=http://backend:5001 \
@@ -126,7 +126,7 @@ pipeline {
                     echo 'Verifying all containers are running...'
                     sh '''
                         echo "=== Container Status ==="
-                        docker ps --filter "name=chatapp-"
+                        docker ps --filter  "name=frontend" --filter "name=backend" --filter "name=mongo"
                         echo ""
                         echo "=== Network Info ==="
                         docker network inspect ${NETWORK_NAME}
@@ -141,20 +141,20 @@ pipeline {
             echo 'Deployment completed successfully!'
             sh '''
                 echo "All services are up and running:"
-                docker ps --filter "name=chatapp-" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+                docker ps --filter "name=frontend" --filter "name=backend" --filter "name=mongo" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
             '''
         }
         failure {
             echo 'Deployment failed. Checking logs...'
             sh '''
                 echo "=== Backend Logs ==="
-                docker logs chatapp-backend || true
+                docker logs backend || true
                 echo ""
                 echo "=== Frontend Logs ==="
-                docker logs chatapp-frontend || true
+                docker logs frontend || true
                 echo ""
                 echo "=== MongoDB Logs ==="
-                docker logs chatapp-mongo || true
+                docker logs mongo || true
             '''
         }
         always {
